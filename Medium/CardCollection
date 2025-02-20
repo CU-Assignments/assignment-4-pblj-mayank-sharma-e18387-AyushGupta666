@@ -1,0 +1,74 @@
+import java.util.*;
+
+class CardCollection {
+private Map<String, List> cardMap;
+public CardCollection() {
+    cardMap = new HashMap<>();
+}
+
+public void addCard(String symbol, String card) {
+    cardMap.computeIfAbsent(symbol, k -> new ArrayList<>()).add(card);
+}
+
+public List<String> getCardsBySymbol(String symbol) {
+    return cardMap.getOrDefault(symbol, new ArrayList<>());
+}
+
+public void displayAllCards() {
+    if (cardMap.isEmpty()) {
+        System.out.println("No cards in the collection.");
+        return;
+    }
+    for (Map.Entry<String, List<String>> entry : cardMap.entrySet()) {
+        System.out.println(entry.getKey() + ": " + entry.getValue());
+    }
+}
+
+public static void main(String[] args) {
+    CardCollection collection = new CardCollection();
+    Scanner scanner = new Scanner(System.in);
+
+    collection.addCard("Hearts", "Ace");
+    collection.addCard("Hearts", "King");
+    collection.addCard("Spades", "Queen");
+    collection.addCard("Diamonds", "Jack");
+    collection.addCard("Clubs", "10");
+    collection.addCard("Spades", "2");
+
+    System.out.println("Card Collection System");
+    while (true) {
+        System.out.println("\nOptions:");
+        System.out.println("1. Search cards by symbol");
+        System.out.println("2. Display all cards");
+        System.out.println("3. Exit");
+        System.out.print("Enter your choice: ");
+        
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter symbol (e.g., Hearts, Spades): ");
+                String symbol = scanner.nextLine();
+                List<String> cards = collection.getCardsBySymbol(symbol);
+                if (cards.isEmpty()) {
+                    System.out.println("No cards found for symbol: " + symbol);
+                } else {
+                    System.out.println("Cards for " + symbol + ": " + cards);
+                }
+                break;
+
+            case 2:
+                collection.displayAllCards();
+                break;
+
+            case 3:
+                System.out.println("Exiting program...");
+                scanner.close();
+                return;
+
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+}
